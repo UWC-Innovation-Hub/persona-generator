@@ -62,41 +62,182 @@ const XRPersonaGenerator = () => {
   };
   
   const generatePersonaSVG = () => {
-    // Simplified avatar graphics to match the example better
+    // More detailed avatar graphics based on the provided SVG example
     let avatarGraphic = '';
     
-    // Different simplified avatars based on gender
+    // Determine skin tone based on options
+    const skinTone = formData.origin === 'International' ? '#8e5c3f' : '#f5d0b0';
+    
+    // Determine hair color based on age group
+    const isYoung = ['05-09', '10-17', '18-24', '25-34'].includes(formData.ageGroup);
+    const hairColor = isYoung ? 
+      (formData.origin === 'International' ? '#2a1506' : '#a87732') : 
+      '#d9d9d9'; // Gray hair for older personas
+    
+    // Different avatars based on gender and age
     if (formData.gender === 'Female') {
-      avatarGraphic = `
-        <!-- Simplified Female Avatar -->
-        <circle cx="150" cy="100" r="70" fill="#f2f2f2" stroke="${formData.primaryColor}" stroke-width="2"/>
-        <circle cx="150" cy="100" r="40" fill="#f8d5a8"/> <!-- Face -->
-        <path d="M110,85 Q150,30 190,85" fill="#e57373" stroke="none"/> <!-- Hair -->
-        <path d="M130,110 Q150,125 170,110" stroke="#333" stroke-width="2" fill="none"/> <!-- Smile -->
-        <!-- Simplified body -->
-        <rect x="130" y="145" width="40" height="25" rx="10" fill="${formData.primaryColor}"/>
-      `;
+      if (isYoung) {
+        // Young Female
+        avatarGraphic = `
+          <!-- Young Female Avatar -->
+          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
+          
+          <!-- Face -->
+          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
+          
+          <!-- Hair -->
+          <path d="M105,85 C100,60 125,40 150,40 C175,40 200,60 195,85 C190,75 170,60 150,60 C130,60 110,75 105,85 Z" fill="${hairColor}" />
+          <path d="M105,85 C102,90 102,100 105,115 C125,105 130,100 130,90 C130,80 120,70 105,85 Z" fill="${hairColor}" />
+          <path d="M195,85 C198,90 198,100 195,115 C175,105 170,100 170,90 C170,80 180,70 195,85 Z" fill="${hairColor}" />
+          
+          <!-- Eyes -->
+          <ellipse cx="135" cy="90" rx="5" ry="7" fill="#3a3a3a" />
+          <ellipse cx="165" cy="90" rx="5" ry="7" fill="#3a3a3a" />
+          
+          <!-- Eyelashes -->
+          <line x1="130" y1="85" x2="135" y2="82" stroke="#3a3a3a" stroke-width="1" />
+          <line x1="135" y1="83" x2="135" y2="80" stroke="#3a3a3a" stroke-width="1" />
+          <line x1="140" y1="85" x2="140" y2="82" stroke="#3a3a3a" stroke-width="1" />
+          
+          <line x1="170" y1="85" x2="165" y2="82" stroke="#3a3a3a" stroke-width="1" />
+          <line x1="165" y1="83" x2="165" y2="80" stroke="#3a3a3a" stroke-width="1" />
+          <line x1="160" y1="85" x2="160" y2="82" stroke="#3a3a3a" stroke-width="1" />
+          
+          <!-- Nose and Mouth -->
+          <path d="M150,105 L154,115 L146,115 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
+          <path d="M140,130 C145,135 155,135 160,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
+          
+          <!-- Earrings -->
+          <circle cx="110" cy="100" r="5" fill="#ffd700" />
+          <circle cx="190" cy="100" r="5" fill="#ffd700" />
+          
+          <!-- Shirt -->
+          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
+        `;
+      } else {
+        // Older Female
+        avatarGraphic = `
+          <!-- Older Female Avatar -->
+          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
+          
+          <!-- Face -->
+          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
+          
+          <!-- Hair -->
+          <path d="M110,85 C105,60 130,40 150,40 C170,40 195,60 190,85 C180,75 165,70 150,70 C135,70 120,75 110,85 Z" fill="${hairColor}" />
+          
+          <!-- Glasses -->
+          <rect x="125" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
+          <rect x="155" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
+          <line x1="145" y1="93" x2="155" y2="93" stroke="#3a3a3a" stroke-width="2" />
+          
+          <!-- Eyes -->
+          <ellipse cx="135" cy="93" rx="4" ry="5" fill="#3a3a3a" />
+          <ellipse cx="165" cy="93" rx="4" ry="5" fill="#3a3a3a" />
+          
+          <!-- Nose and Mouth -->
+          <path d="M150,105 L156,120 L144,120 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
+          <path d="M135,130 C145,135 155,135 165,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
+          
+          <!-- Wrinkles -->
+          <path d="M125,80 C135,78 145,78 155,80" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
+          <path d="M130,135 C135,130 140,128 145,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
+          <path d="M170,135 C165,130 160,128 155,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
+          
+          <!-- Earrings -->
+          <circle cx="110" cy="100" r="5" fill="#ffd700" />
+          <circle cx="190" cy="100" r="5" fill="#ffd700" />
+          
+          <!-- Necklace -->
+          <path d="M130,145 C140,150 160,150 170,145" fill="none" stroke="#ffd700" stroke-width="3" />
+          
+          <!-- Shirt -->
+          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
+        `;
+      }
     } else if (formData.gender === 'Male') {
-      avatarGraphic = `
-        <!-- Simplified Male Avatar -->
-        <circle cx="150" cy="100" r="70" fill="#f2f2f2" stroke="${formData.primaryColor}" stroke-width="2"/>
-        <circle cx="150" cy="100" r="40" fill="#f8d5a8"/> <!-- Face -->
-        <path d="M110,70 Q150,40 190,70" fill="#333" stroke="none"/> <!-- Hair -->
-        <path d="M130,110 Q150,125 170,110" stroke="#333" stroke-width="2" fill="none"/> <!-- Smile -->
-        <!-- Optional beard for males -->
-        <path d="M130,115 Q150,140 170,115" fill="#333" stroke="none" fill-opacity="0.5"/>
-        <!-- Simplified body -->
-        <rect x="130" y="145" width="40" height="25" rx="10" fill="${formData.primaryColor}"/>
-      `;
+      if (isYoung) {
+        // Young Male
+        avatarGraphic = `
+          <!-- Young Male Avatar -->
+          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
+          
+          <!-- Face -->
+          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
+          
+          <!-- Hair -->
+          <path d="M110,90 C105,70 130,45 150,45 C170,45 195,70 190,90 C180,80 165,75 150,75 C135,75 120,80 110,90 Z" fill="${hairColor}" />
+          
+          <!-- Eyes -->
+          <ellipse cx="135" cy="90" rx="5" ry="7" fill="#3a3a3a" />
+          <ellipse cx="165" cy="90" rx="5" ry="7" fill="#3a3a3a" />
+          
+          <!-- Nose and Mouth -->
+          <path d="M150,105 L154,115 L146,115 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
+          <path d="M140,130 C145,135 155,135 160,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
+          
+          <!-- Shirt -->
+          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
+        `;
+      } else {
+        // Older Male
+        avatarGraphic = `
+          <!-- Older Male Avatar -->
+          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
+          
+          <!-- Face -->
+          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
+          
+          <!-- Hair & Baldness -->
+          <path d="M120,75 C115,55 130,45 150,45 C170,45 185,55 180,75 C165,65 135,65 120,75 Z" fill="${hairColor}" />
+          
+          <!-- Glasses -->
+          <rect x="125" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
+          <rect x="155" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
+          <line x1="145" y1="93" x2="155" y2="93" stroke="#3a3a3a" stroke-width="2" />
+          
+          <!-- Eyes -->
+          <ellipse cx="135" cy="93" rx="4" ry="5" fill="#3a3a3a" />
+          <ellipse cx="165" cy="93" rx="4" ry="5" fill="#3a3a3a" />
+          
+          <!-- Nose and Mouth -->
+          <path d="M150,105 L156,120 L144,120 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
+          <path d="M135,130 C145,135 155,135 165,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
+          
+          <!-- Wrinkles -->
+          <path d="M125,80 C135,78 145,78 155,80" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
+          <path d="M130,135 C135,130 140,128 145,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
+          <path d="M170,135 C165,130 160,128 155,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
+          
+          <!-- Beard -->
+          <path d="M130,135 Q150,150 170,135" fill="${hairColor}" fill-opacity="0.7" />
+          
+          <!-- Shirt -->
+          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
+        `;
+      }
     } else {
+      // Non-binary avatar with neutral features
       avatarGraphic = `
-        <!-- Simplified Non-binary Avatar -->
-        <circle cx="150" cy="100" r="70" fill="#f2f2f2" stroke="${formData.primaryColor}" stroke-width="2"/>
-        <circle cx="150" cy="100" r="40" fill="#f8d5a8"/> <!-- Face -->
-        <path d="M110,75 Q150,45 190,75" fill="#9c27b0" stroke="none"/> <!-- Hair -->
-        <path d="M130,110 Q150,125 170,110" stroke="#333" stroke-width="2" fill="none"/> <!-- Smile -->
-        <!-- Simplified body -->
-        <rect x="130" y="145" width="40" height="25" rx="10" fill="${formData.primaryColor}"/>
+        <!-- Non-binary Avatar -->
+        <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
+        
+        <!-- Face -->
+        <circle cx="150" cy="100" r="50" fill="${skinTone}" />
+        
+        <!-- Hair - more neutral style -->
+        <path d="M110,80 C105,55 125,40 150,40 C175,40 195,55 190,80 C180,70 165,65 150,65 C135,65 120,70 110,80 Z" fill="${hairColor}" />
+        
+        <!-- Eyes -->
+        <ellipse cx="135" cy="90" rx="5" ry="6" fill="#3a3a3a" />
+        <ellipse cx="165" cy="90" rx="5" ry="6" fill="#3a3a3a" />
+        
+        <!-- Nose and Mouth -->
+        <path d="M150,105 L154,115 L146,115 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
+        <path d="M140,130 C145,135 155,135 160,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
+        
+        <!-- Shirt -->
+        <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
       `;
     }
     
@@ -450,6 +591,10 @@ const XRPersonaGenerator = () => {
               >
                 <option value="Local">Local</option>
                 <option value="International">International</option>
+                <option value="Asian">Asian</option>
+                <option value="European">European</option>
+                <option value="African">African</option>
+                <option value="Middle Eastern">Middle Eastern</option>
               </select>
             </div>
             
