@@ -62,89 +62,51 @@ const XRPersonaGenerator = () => {
   };
   
   const generatePersonaSVG = () => {
-    // More sophisticated SVG that matches the examples better
-    // Create different face shapes and hairstyles based on gender selection
-    let faceFeatures = '';
+    // Simplified avatar graphics to match the example better
+    let avatarGraphic = '';
     
+    // Different simplified avatars based on gender
     if (formData.gender === 'Female') {
-      // Female avatar with different hair options
-      if (formData.ageGroup === '18-24' || formData.ageGroup === '25-34') {
-        // Younger female with longer hair
-        faceFeatures = `
-          <!-- Face -->
-          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
-          <!-- Hair -->
-          <path d="M110,80 Q120,40 150,40 Q180,40 190,80" fill="#6b3e2e" stroke="none"/>
-          <path d="M110,80 Q120,110 150,120 Q180,110 190,80" fill="#f8d5a8" stroke="none"/>
-          <!-- Face features -->
-          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
-          <!-- Optional collar or accessory -->
-          <path d="M130,130 Q150,140 170,130" stroke="#ff9b54" stroke-width="4" fill="none"/>
-        `;
-      } else {
-        // Older female with different hairstyle
-        faceFeatures = `
-          <!-- Face -->
-          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
-          <!-- Hair -->
-          <path d="M110,65 Q130,30 150,30 Q170,30 190,65" fill="#6b3e2e" stroke="none"/>
-          <path d="M110,65 Q130,95 150,105 Q170,95 190,65" fill="#f8d5a8" stroke="none"/>
-          <!-- Face features -->
-          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
-        `;
-      }
+      avatarGraphic = `
+        <!-- Simplified Female Avatar -->
+        <circle cx="150" cy="100" r="70" fill="#f2f2f2" stroke="${formData.primaryColor}" stroke-width="2"/>
+        <circle cx="150" cy="100" r="40" fill="#f8d5a8"/> <!-- Face -->
+        <path d="M110,85 Q150,30 190,85" fill="#e57373" stroke="none"/> <!-- Hair -->
+        <path d="M130,110 Q150,125 170,110" stroke="#333" stroke-width="2" fill="none"/> <!-- Smile -->
+        <!-- Simplified body -->
+        <rect x="130" y="145" width="40" height="25" rx="10" fill="${formData.primaryColor}"/>
+      `;
     } else if (formData.gender === 'Male') {
-      if (formData.ageGroup === '18-24' || formData.ageGroup === '25-34') {
-        // Younger male with modern hairstyle
-        faceFeatures = `
-          <!-- Face -->
-          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
-          <!-- Hair -->
-          <path d="M110,60 Q130,30 150,30 Q170,30 190,60" fill="#1a1a1a" stroke="none"/>
-          <!-- Face features -->
-          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
-          <!-- Optional beard for some males -->
-          <path d="M130,100 Q150,125 170,100" fill="#1a1a1a" stroke="none"/>
-        `;
-      } else {
-        // Older male with shorter hair
-        faceFeatures = `
-          <!-- Face -->
-          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
-          <!-- Short hair -->
-          <path d="M110,65 Q130,45 150,45 Q170,45 190,65" fill="#1a1a1a" stroke="none"/>
-          <!-- Face features -->
-          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
-          <!-- Optional glasses -->
-          <path d="M125,80 L175,80" stroke="#444" stroke-width="2" fill="none"/>
-        `;
-      }
+      avatarGraphic = `
+        <!-- Simplified Male Avatar -->
+        <circle cx="150" cy="100" r="70" fill="#f2f2f2" stroke="${formData.primaryColor}" stroke-width="2"/>
+        <circle cx="150" cy="100" r="40" fill="#f8d5a8"/> <!-- Face -->
+        <path d="M110,70 Q150,40 190,70" fill="#333" stroke="none"/> <!-- Hair -->
+        <path d="M130,110 Q150,125 170,110" stroke="#333" stroke-width="2" fill="none"/> <!-- Smile -->
+        <!-- Optional beard for males -->
+        <path d="M130,115 Q150,140 170,115" fill="#333" stroke="none" fill-opacity="0.5"/>
+        <!-- Simplified body -->
+        <rect x="130" y="145" width="40" height="25" rx="10" fill="${formData.primaryColor}"/>
+      `;
     } else {
-      // Non-binary or other options with neutral features
-      faceFeatures = `
-        <!-- Face -->
-        <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
-        <!-- Neutral hair -->
-        <path d="M110,60 Q130,40 150,40 Q170,40 190,60" fill="#6b3e2e" stroke="none"/>
-        <!-- Face features -->
-        <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+      avatarGraphic = `
+        <!-- Simplified Non-binary Avatar -->
+        <circle cx="150" cy="100" r="70" fill="#f2f2f2" stroke="${formData.primaryColor}" stroke-width="2"/>
+        <circle cx="150" cy="100" r="40" fill="#f8d5a8"/> <!-- Face -->
+        <path d="M110,75 Q150,45 190,75" fill="#9c27b0" stroke="none"/> <!-- Hair -->
+        <path d="M130,110 Q150,125 170,110" stroke="#333" stroke-width="2" fill="none"/> <!-- Smile -->
+        <!-- Simplified body -->
+        <rect x="130" y="145" width="40" height="25" rx="10" fill="${formData.primaryColor}"/>
       `;
     }
     
-    // Add age and origin indicators
-    let ageOriginIndicator = '';
-    if (formData.origin === 'International') {
-      ageOriginIndicator = `
-        <text x="240" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">International</text>
-      `;
-    } else {
-      ageOriginIndicator = `
-        <text x="240" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">Local</text>
-      `;
-    }
-    
-    ageOriginIndicator += `
-      <text x="60" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">${formData.ageGroup}</text>
+    // Demographic information display (as requested: age group, gender, origin)
+    const demographicInfo = `
+      <!-- Demographic Information Block -->
+      <rect x="50" y="180" width="200" height="65" rx="5" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+      <text x="150" y="200" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Age Group: ${formData.ageGroup}</text>
+      <text x="150" y="220" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Gender: ${formData.gender}</text>
+      <text x="150" y="240" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Origin: ${formData.origin}</text>
     `;
     
     // Create accessibility needs section with better text wrapping
@@ -164,44 +126,40 @@ const XRPersonaGenerator = () => {
     
     const svg = `
       <svg width="300" height="${580 + (formData.accessibilityNeeds?.length || 0) * 20}" xmlns="http://www.w3.org/2000/svg">
-        <!-- Outer Circle -->
-        <circle cx="150" cy="100" r="80" fill="white" stroke="${formData.primaryColor}" stroke-width="6"/>
+        <!-- Avatar Section -->
+        ${avatarGraphic}
         
-        <!-- Avatar Body Shape -->
-        <circle cx="150" cy="120" r="50" fill="${formData.primaryColor}"/>
-        
-        ${faceFeatures}
-        
-        ${ageOriginIndicator}
+        <!-- Demographic Information -->
+        ${demographicInfo}
         
         <!-- Name and Title -->
-        <text x="150" y="220" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">${formData.name || "User Persona"}</text>
-        <text x="150" y="250" font-family="Arial" font-size="16" text-anchor="middle">${formData.title || "XR User"}</text>
+        <text x="150" y="270" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">${formData.name || "User Persona"}</text>
+        <text x="150" y="295" font-family="Arial" font-size="14" text-anchor="middle" fill="#666">${formData.title || "XR User"}</text>
         
-        <!-- Characteristics - Better styled to match examples -->
-        <rect x="60" y="280" width="180" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="150" y="300" font-family="Arial" font-size="14" text-anchor="middle">${formData.focusType}</text>
-        
+        <!-- Characteristics -->
         <rect x="60" y="320" width="180" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="150" y="340" font-family="Arial" font-size="14" text-anchor="middle">${formData.sessionLength}</text>
+        <text x="150" y="340" font-family="Arial" font-size="14" text-anchor="middle">${formData.focusType}</text>
         
-        <rect x="60" y="360" width="180" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="150" y="380" font-family="Arial" font-size="14" text-anchor="middle">${formData.platformPref}</text>
+        <rect x="60" y="355" width="180" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="375" font-family="Arial" font-size="14" text-anchor="middle">${formData.sessionLength}</text>
+        
+        <rect x="60" y="390" width="180" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="410" font-family="Arial" font-size="14" text-anchor="middle">${formData.platformPref}</text>
         
         <!-- XR Experience Level -->
-        <rect x="60" y="400" width="180" height="30" rx="15" fill="#e5e7eb"/>
-        <text x="150" y="420" font-family="Arial" font-size="14" text-anchor="middle">${formData.xrExperienceLevel}</text>
+        <rect x="60" y="425" width="180" height="30" rx="15" fill="#e5e7eb"/>
+        <text x="150" y="445" font-family="Arial" font-size="14" text-anchor="middle">${formData.xrExperienceLevel}</text>
         
         <!-- Interaction Motives - Now with color-coded bullets -->
-        <text x="60" y="450" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
-        <circle cx="70" cy="470" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="475" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
-        
+        <text x="60" y="475" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
         <circle cx="70" cy="495" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="500" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
+        <text x="85" y="500" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
         
         <circle cx="70" cy="520" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="525" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
+        <text x="85" y="525" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
+        
+        <circle cx="70" cy="545" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="550" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
         
         <!-- Accessibility needs section -->
         ${accessibilitySection}
@@ -407,8 +365,6 @@ const XRPersonaGenerator = () => {
     }, 100);
   };
   
-
-  
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6 text-center">XR Persona Generator</h1>
@@ -473,6 +429,8 @@ const XRPersonaGenerator = () => {
                   onChange={handleInputChange}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 >
+                  <option value="05-09">05-09</option>
+                  <option value="10-17">10-17</option>
                   <option value="18-24">18-24</option>
                   <option value="25-34">25-34</option>
                   <option value="35-44">35-44</option>
