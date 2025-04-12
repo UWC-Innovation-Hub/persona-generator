@@ -62,192 +62,50 @@ const XRPersonaGenerator = () => {
   };
   
   const generatePersonaSVG = () => {
-    // More detailed avatar graphics based on the provided SVG example
+    // Create much simpler avatars that match the example image
     let avatarGraphic = '';
     
     // Determine skin tone based on options
-    const skinTone = formData.origin === 'International' ? '#8e5c3f' : '#f5d0b0';
+    let skinTone = '#f5d0b0'; // Default light skin tone
+    if (formData.origin === 'African') skinTone = '#8e5c3f';
+    else if (formData.origin === 'Asian') skinTone = '#f3d3a3';
+    else if (formData.origin === 'Middle Eastern') skinTone = '#e5c298';
     
-    // Determine hair color based on age group
+    // Determine hair color based on age group and origin
     const isYoung = ['05-09', '10-17', '18-24', '25-34'].includes(formData.ageGroup);
-    const hairColor = isYoung ? 
-      (formData.origin === 'International' ? '#2a1506' : '#a87732') : 
-      '#d9d9d9'; // Gray hair for older personas
+    let hairColor = '#a87732'; // Default brown
     
-    // Different avatars based on gender and age
-    if (formData.gender === 'Female') {
-      if (isYoung) {
-        // Young Female
-        avatarGraphic = `
-          <!-- Young Female Avatar -->
-          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
-          
-          <!-- Face -->
-          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
-          
-          <!-- Hair -->
-          <path d="M105,85 C100,60 125,40 150,40 C175,40 200,60 195,85 C190,75 170,60 150,60 C130,60 110,75 105,85 Z" fill="${hairColor}" />
-          <path d="M105,85 C102,90 102,100 105,115 C125,105 130,100 130,90 C130,80 120,70 105,85 Z" fill="${hairColor}" />
-          <path d="M195,85 C198,90 198,100 195,115 C175,105 170,100 170,90 C170,80 180,70 195,85 Z" fill="${hairColor}" />
-          
-          <!-- Eyes -->
-          <ellipse cx="135" cy="90" rx="5" ry="7" fill="#3a3a3a" />
-          <ellipse cx="165" cy="90" rx="5" ry="7" fill="#3a3a3a" />
-          
-          <!-- Eyelashes -->
-          <line x1="130" y1="85" x2="135" y2="82" stroke="#3a3a3a" stroke-width="1" />
-          <line x1="135" y1="83" x2="135" y2="80" stroke="#3a3a3a" stroke-width="1" />
-          <line x1="140" y1="85" x2="140" y2="82" stroke="#3a3a3a" stroke-width="1" />
-          
-          <line x1="170" y1="85" x2="165" y2="82" stroke="#3a3a3a" stroke-width="1" />
-          <line x1="165" y1="83" x2="165" y2="80" stroke="#3a3a3a" stroke-width="1" />
-          <line x1="160" y1="85" x2="160" y2="82" stroke="#3a3a3a" stroke-width="1" />
-          
-          <!-- Nose and Mouth -->
-          <path d="M150,105 L154,115 L146,115 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
-          <path d="M140,130 C145,135 155,135 160,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
-          
-          <!-- Earrings -->
-          <circle cx="110" cy="100" r="5" fill="#ffd700" />
-          <circle cx="190" cy="100" r="5" fill="#ffd700" />
-          
-          <!-- Shirt -->
-          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
-        `;
-      } else {
-        // Older Female
-        avatarGraphic = `
-          <!-- Older Female Avatar -->
-          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
-          
-          <!-- Face -->
-          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
-          
-          <!-- Hair -->
-          <path d="M110,85 C105,60 130,40 150,40 C170,40 195,60 190,85 C180,75 165,70 150,70 C135,70 120,75 110,85 Z" fill="${hairColor}" />
-          
-          <!-- Glasses -->
-          <rect x="125" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
-          <rect x="155" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
-          <line x1="145" y1="93" x2="155" y2="93" stroke="#3a3a3a" stroke-width="2" />
-          
-          <!-- Eyes -->
-          <ellipse cx="135" cy="93" rx="4" ry="5" fill="#3a3a3a" />
-          <ellipse cx="165" cy="93" rx="4" ry="5" fill="#3a3a3a" />
-          
-          <!-- Nose and Mouth -->
-          <path d="M150,105 L156,120 L144,120 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
-          <path d="M135,130 C145,135 155,135 165,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
-          
-          <!-- Wrinkles -->
-          <path d="M125,80 C135,78 145,78 155,80" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
-          <path d="M130,135 C135,130 140,128 145,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
-          <path d="M170,135 C165,130 160,128 155,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
-          
-          <!-- Earrings -->
-          <circle cx="110" cy="100" r="5" fill="#ffd700" />
-          <circle cx="190" cy="100" r="5" fill="#ffd700" />
-          
-          <!-- Necklace -->
-          <path d="M130,145 C140,150 160,150 170,145" fill="none" stroke="#ffd700" stroke-width="3" />
-          
-          <!-- Shirt -->
-          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
-        `;
-      }
-    } else if (formData.gender === 'Male') {
-      if (isYoung) {
-        // Young Male
-        avatarGraphic = `
-          <!-- Young Male Avatar -->
-          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
-          
-          <!-- Face -->
-          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
-          
-          <!-- Hair -->
-          <path d="M110,90 C105,70 130,45 150,45 C170,45 195,70 190,90 C180,80 165,75 150,75 C135,75 120,80 110,90 Z" fill="${hairColor}" />
-          
-          <!-- Eyes -->
-          <ellipse cx="135" cy="90" rx="5" ry="7" fill="#3a3a3a" />
-          <ellipse cx="165" cy="90" rx="5" ry="7" fill="#3a3a3a" />
-          
-          <!-- Nose and Mouth -->
-          <path d="M150,105 L154,115 L146,115 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
-          <path d="M140,130 C145,135 155,135 160,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
-          
-          <!-- Shirt -->
-          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
-        `;
-      } else {
-        // Older Male
-        avatarGraphic = `
-          <!-- Older Male Avatar -->
-          <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
-          
-          <!-- Face -->
-          <circle cx="150" cy="100" r="50" fill="${skinTone}" />
-          
-          <!-- Hair & Baldness -->
-          <path d="M120,75 C115,55 130,45 150,45 C170,45 185,55 180,75 C165,65 135,65 120,75 Z" fill="${hairColor}" />
-          
-          <!-- Glasses -->
-          <rect x="125" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
-          <rect x="155" y="88" width="20" height="10" rx="3" ry="3" fill="none" stroke="#3a3a3a" stroke-width="2" />
-          <line x1="145" y1="93" x2="155" y2="93" stroke="#3a3a3a" stroke-width="2" />
-          
-          <!-- Eyes -->
-          <ellipse cx="135" cy="93" rx="4" ry="5" fill="#3a3a3a" />
-          <ellipse cx="165" cy="93" rx="4" ry="5" fill="#3a3a3a" />
-          
-          <!-- Nose and Mouth -->
-          <path d="M150,105 L156,120 L144,120 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
-          <path d="M135,130 C145,135 155,135 165,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
-          
-          <!-- Wrinkles -->
-          <path d="M125,80 C135,78 145,78 155,80" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
-          <path d="M130,135 C135,130 140,128 145,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
-          <path d="M170,135 C165,130 160,128 155,130" fill="none" stroke="${skinTone === '#f5d0b0' ? '#d0b090' : '#6d4c33'}" stroke-width="1" />
-          
-          <!-- Beard -->
-          <path d="M130,135 Q150,150 170,135" fill="${hairColor}" fill-opacity="0.7" />
-          
-          <!-- Shirt -->
-          <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
-        `;
-      }
-    } else {
-      // Non-binary avatar with neutral features
-      avatarGraphic = `
-        <!-- Non-binary Avatar -->
-        <circle cx="150" cy="100" r="80" fill="${formData.primaryColor}" />
-        
-        <!-- Face -->
-        <circle cx="150" cy="100" r="50" fill="${skinTone}" />
-        
-        <!-- Hair - more neutral style -->
-        <path d="M110,80 C105,55 125,40 150,40 C175,40 195,55 190,80 C180,70 165,65 150,65 C135,65 120,70 110,80 Z" fill="${hairColor}" />
-        
-        <!-- Eyes -->
-        <ellipse cx="135" cy="90" rx="5" ry="6" fill="#3a3a3a" />
-        <ellipse cx="165" cy="90" rx="5" ry="6" fill="#3a3a3a" />
-        
-        <!-- Nose and Mouth -->
-        <path d="M150,105 L154,115 L146,115 Z" fill="${skinTone === '#f5d0b0' ? '#e6c2a3' : '#7d5035'}" />
-        <path d="M140,130 C145,135 155,135 160,130" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" />
-        
-        <!-- Shirt -->
-        <path d="M100,170 C110,150 120,145 150,145 C180,145 190,150 200,170" fill="${formData.primaryColor}" />
-      `;
-    }
+    if (formData.origin === 'African') hairColor = '#2a1506'; // Very dark
+    else if (formData.origin === 'Asian') hairColor = '#0a0a0a'; // Black
+    else if (!isYoung) hairColor = '#d9d9d9'; // Gray for older personas
+    else if (formData.ageGroup === '05-09') hairColor = '#f9d71c'; // Blonde for young children
     
-    // Demographic information display (as requested: age group, gender, origin)
+    // Simple avatar style that matches the example image
+    avatarGraphic = `
+      <!-- Avatar Circle Background -->
+      <circle cx="150" cy="80" r="70" fill="${formData.primaryColor}" />
+      
+      <!-- Face - Simple Circle -->
+      <circle cx="150" cy="80" r="45" fill="${skinTone}" />
+      
+      <!-- Simple Hair - Just a basic shape on top -->
+      <path d="M105,70 C110,40 130,25 150,25 C170,25 190,40 195,70 C180,55 165,45 150,45 C135,45 120,55 105,70 Z" fill="${hairColor}" />
+      
+      <!-- Super Simple Eyes - Just Ovals -->
+      <ellipse cx="135" cy="75" rx="5" ry="5" fill="#333333" />
+      <ellipse cx="165" cy="75" rx="5" ry="5" fill="#333333" />
+      
+      <!-- Simple Smiling Mouth -->
+      <path d="M135,100 C145,110 155,110 165,100" fill="none" stroke="#333333" stroke-width="2" stroke-linecap="round" />
+    `;
+    
+    // Demographic information display with better positioning
     const demographicInfo = `
-      <!-- Demographic Information Block -->
-      <rect x="50" y="180" width="200" height="65" rx="5" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
-      <text x="150" y="200" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Age Group: ${formData.ageGroup}</text>
-      <text x="150" y="220" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Gender: ${formData.gender}</text>
-      <text x="150" y="240" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Origin: ${formData.origin}</text>
+      <!-- Demographic Information Block - Positioned right below avatar -->
+      <rect x="75" y="155" width="150" height="65" rx="5" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+      <text x="150" y="175" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Age Group: ${formData.ageGroup}</text>
+      <text x="150" y="195" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Gender: ${formData.gender}</text>
+      <text x="150" y="215" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Origin: ${formData.origin}</text>
     `;
     
     // Create accessibility needs section with better text wrapping
@@ -266,7 +124,7 @@ const XRPersonaGenerator = () => {
     }
     
     const svg = `
-      <svg width="300" height="${580 + (formData.accessibilityNeeds?.length || 0) * 20}" xmlns="http://www.w3.org/2000/svg">
+      <svg width="300" height="${550 + (formData.accessibilityNeeds?.length || 0) * 20}" xmlns="http://www.w3.org/2000/svg">
         <!-- Avatar Section -->
         ${avatarGraphic}
         
@@ -274,33 +132,33 @@ const XRPersonaGenerator = () => {
         ${demographicInfo}
         
         <!-- Name and Title -->
-        <text x="150" y="270" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">${formData.name || "User Persona"}</text>
-        <text x="150" y="295" font-family="Arial" font-size="14" text-anchor="middle" fill="#666">${formData.title || "XR User"}</text>
+        <text x="150" y="245" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">${formData.name || "User Persona"}</text>
+        <text x="150" y="265" font-family="Arial" font-size="14" text-anchor="middle" fill="#666">${formData.title || "XR User"}</text>
         
         <!-- Characteristics -->
-        <rect x="60" y="320" width="180" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="150" y="340" font-family="Arial" font-size="14" text-anchor="middle">${formData.focusType}</text>
+        <rect x="75" y="285" width="150" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="305" font-family="Arial" font-size="14" text-anchor="middle">${formData.focusType}</text>
         
-        <rect x="60" y="355" width="180" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="150" y="375" font-family="Arial" font-size="14" text-anchor="middle">${formData.sessionLength}</text>
+        <rect x="75" y="320" width="150" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="340" font-family="Arial" font-size="14" text-anchor="middle">${formData.sessionLength}</text>
         
-        <rect x="60" y="390" width="180" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="150" y="410" font-family="Arial" font-size="14" text-anchor="middle">${formData.platformPref}</text>
+        <rect x="75" y="355" width="150" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="375" font-family="Arial" font-size="14" text-anchor="middle">${formData.platformPref}</text>
         
         <!-- XR Experience Level -->
-        <rect x="60" y="425" width="180" height="30" rx="15" fill="#e5e7eb"/>
-        <text x="150" y="445" font-family="Arial" font-size="14" text-anchor="middle">${formData.xrExperienceLevel}</text>
+        <rect x="75" y="390" width="150" height="30" rx="15" fill="#e5e7eb"/>
+        <text x="150" y="410" font-family="Arial" font-size="14" text-anchor="middle">${formData.xrExperienceLevel}</text>
         
         <!-- Interaction Motives - Now with color-coded bullets -->
-        <text x="60" y="475" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
-        <circle cx="70" cy="495" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="500" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
+        <text x="75" y="435" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
+        <circle cx="85" cy="455" r="5" fill="${formData.primaryColor}"/>
+        <text x="100" y="460" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
         
-        <circle cx="70" cy="520" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="525" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
+        <circle cx="85" cy="480" r="5" fill="${formData.primaryColor}"/>
+        <text x="100" y="485" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
         
-        <circle cx="70" cy="545" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="550" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
+        <circle cx="85" cy="505" r="5" fill="${formData.primaryColor}"/>
+        <text x="100" y="510" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
         
         <!-- Accessibility needs section -->
         ${accessibilitySection}
