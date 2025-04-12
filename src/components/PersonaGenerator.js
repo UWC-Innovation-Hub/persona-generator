@@ -2,9 +2,13 @@ import React, { useState, useRef } from 'react';
 
 const XRPersonaGenerator = () => {
   const [formData, setFormData] = useState({
+    // Basic demographic info
     name: '',
     title: '',
     primaryColor: '#3b82f6', // Default blue
+    gender: 'Female',
+    ageGroup: '25-34',
+    origin: 'Local',
     // XR-specific categories
     focusType: 'Interaction-focused',
     sessionLength: 'Short sessions (5-15 min)',
@@ -59,6 +63,90 @@ const XRPersonaGenerator = () => {
   
   const generatePersonaSVG = () => {
     // More sophisticated SVG that matches the examples better
+    // Create different face shapes and hairstyles based on gender selection
+    let faceFeatures = '';
+    
+    if (formData.gender === 'Female') {
+      // Female avatar with different hair options
+      if (formData.ageGroup === '18-24' || formData.ageGroup === '25-34') {
+        // Younger female with longer hair
+        faceFeatures = `
+          <!-- Face -->
+          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
+          <!-- Hair -->
+          <path d="M110,80 Q120,40 150,40 Q180,40 190,80" fill="#6b3e2e" stroke="none"/>
+          <path d="M110,80 Q120,110 150,120 Q180,110 190,80" fill="#f8d5a8" stroke="none"/>
+          <!-- Face features -->
+          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+          <!-- Optional collar or accessory -->
+          <path d="M130,130 Q150,140 170,130" stroke="#ff9b54" stroke-width="4" fill="none"/>
+        `;
+      } else {
+        // Older female with different hairstyle
+        faceFeatures = `
+          <!-- Face -->
+          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
+          <!-- Hair -->
+          <path d="M110,65 Q130,30 150,30 Q170,30 190,65" fill="#6b3e2e" stroke="none"/>
+          <path d="M110,65 Q130,95 150,105 Q170,95 190,65" fill="#f8d5a8" stroke="none"/>
+          <!-- Face features -->
+          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+        `;
+      }
+    } else if (formData.gender === 'Male') {
+      if (formData.ageGroup === '18-24' || formData.ageGroup === '25-34') {
+        // Younger male with modern hairstyle
+        faceFeatures = `
+          <!-- Face -->
+          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
+          <!-- Hair -->
+          <path d="M110,60 Q130,30 150,30 Q170,30 190,60" fill="#1a1a1a" stroke="none"/>
+          <!-- Face features -->
+          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+          <!-- Optional beard for some males -->
+          <path d="M130,100 Q150,125 170,100" fill="#1a1a1a" stroke="none"/>
+        `;
+      } else {
+        // Older male with shorter hair
+        faceFeatures = `
+          <!-- Face -->
+          <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
+          <!-- Short hair -->
+          <path d="M110,65 Q130,45 150,45 Q170,45 190,65" fill="#1a1a1a" stroke="none"/>
+          <!-- Face features -->
+          <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+          <!-- Optional glasses -->
+          <path d="M125,80 L175,80" stroke="#444" stroke-width="2" fill="none"/>
+        `;
+      }
+    } else {
+      // Non-binary or other options with neutral features
+      faceFeatures = `
+        <!-- Face -->
+        <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
+        <!-- Neutral hair -->
+        <path d="M110,60 Q130,40 150,40 Q170,40 190,60" fill="#6b3e2e" stroke="none"/>
+        <!-- Face features -->
+        <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+      `;
+    }
+    
+    // Add age and origin indicators
+    let ageOriginIndicator = '';
+    if (formData.origin === 'International') {
+      ageOriginIndicator = `
+        <text x="240" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">International</text>
+      `;
+    } else {
+      ageOriginIndicator = `
+        <text x="240" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">Local</text>
+      `;
+    }
+    
+    ageOriginIndicator += `
+      <text x="60" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">${formData.ageGroup}</text>
+    `;
+    
     const svg = `
       <svg width="300" height="580" xmlns="http://www.w3.org/2000/svg">
         <!-- Outer Circle -->
@@ -67,9 +155,9 @@ const XRPersonaGenerator = () => {
         <!-- Avatar Body Shape -->
         <circle cx="150" cy="120" r="50" fill="${formData.primaryColor}"/>
         
-        <!-- Face -->
-        <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
-        <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
+        ${faceFeatures}
+        
+        ${ageOriginIndicator}
         
         <!-- Name and Title -->
         <text x="150" y="220" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">${formData.name || "User Persona"}</text>
@@ -167,27 +255,96 @@ const XRPersonaGenerator = () => {
     // Examples inspired by the provided persona images
     const personas = [
       {
-        name: 'Sipho',
-        title: 'The Digital Heritage Explorer',
-        primaryColor: '#3b82f6', // blue
-        focusType: 'Interaction-focused',
-        sessionLength: 'Short sessions (5-15 min)',
-        platformPref: 'Mobile-first user',
-        xrExperienceLevel: 'XR enthusiast',
-        accessibilityNeeds: ['Low-bandwidth alternatives'],
-        interactionPreferences: ['3D Exploration', 'Interactive Navigation'],
-        spatialInteractionModel: 'Object manipulation',
+        name: 'Gwen',
+        title: 'The narrative game connoisseur',
+        primaryColor: '#9c27b0', // purple
+        gender: 'Female',
+        ageGroup: '25-34',
+        origin: 'Local',
+        focusType: 'Story-focused',
+        sessionLength: 'Medium sessions (10-20 min)',
+        platformPref: 'Prefers PC',
+        xrExperienceLevel: 'XR comfortable',
+        accessibilityNeeds: [],
+        interactionPreferences: ['Visual Effects', 'Interactive Navigation'],
+        spatialInteractionModel: 'Free exploration',
         navigationParadigm: 'Non-linear exploration',
-        informationLayering: 'Interactive layer priority',
+        informationLayering: 'Emotional layer emphasis',
         audioPreference: 'Minimal audio',
         visualEffectsLevel: 'Moderate',
-        culturalContext: 'Local heritage connection',
-        motives: ['Digital innovation focus', 'Social media sharing', 'Quick, impactful experiences']
+        culturalContext: 'Content curator',
+        motives: ['Fully consume the content of the game', 'Track progress of collectibles', 'Manually save and manage game states']
+      },
+      {
+        name: 'Alvin',
+        title: 'The indulgent gamer',
+        primaryColor: '#f59e0b', // amber
+        gender: 'Male',
+        ageGroup: '25-34',
+        origin: 'Local',
+        focusType: 'Theme-focused',
+        sessionLength: 'Long sessions',
+        platformPref: 'Prefers console',
+        xrExperienceLevel: 'XR enthusiast',
+        accessibilityNeeds: [],
+        interactionPreferences: ['3D Exploration', 'Interactive Navigation'],
+        spatialInteractionModel: 'Object manipulation',
+        navigationParadigm: 'Free roaming',
+        informationLayering: 'Interactive layer priority',
+        audioPreference: 'Ambient soundscapes',
+        visualEffectsLevel: 'Immersive',
+        culturalContext: 'Relies on curation',
+        motives: ['Fully consume the story of the game', 'Track progress of collectibles', 'Objective notifications and aids']
+      },
+      {
+        name: 'Matias',
+        title: 'The portable gamer',
+        primaryColor: '#3b82f6', // blue
+        gender: 'Male',
+        ageGroup: '18-24',
+        origin: 'Local',
+        focusType: 'Interaction-focused',
+        sessionLength: 'Short sessions (5-15 min)',
+        platformPref: 'Prefers Portable PC/console',
+        xrExperienceLevel: 'XR novice',
+        accessibilityNeeds: [],
+        interactionPreferences: ['3D Exploration'],
+        spatialInteractionModel: 'Fixed viewpoints',
+        navigationParadigm: 'Linear guided path',
+        informationLayering: 'Core narrative focus',
+        audioPreference: 'Minimal audio',
+        visualEffectsLevel: 'Subtle',
+        culturalContext: '',
+        motives: ['Enjoy the experience playing the game', 'Clear and intuitive interaction prompts', 'Skippable dialogue and cinematics']
+      },
+      {
+        name: 'Li',
+        title: 'The grapevine gamer',
+        primaryColor: '#ef4444', // red
+        gender: 'Female',
+        ageGroup: '18-24',
+        origin: 'Local',
+        focusType: 'Character-focused',
+        sessionLength: 'Short sessions (5-15 min)',
+        platformPref: 'No platform preference',
+        xrExperienceLevel: 'XR novice',
+        accessibilityNeeds: [],
+        interactionPreferences: ['Audio Integration', 'Visual Effects'],
+        spatialInteractionModel: 'Guided tour',
+        navigationParadigm: 'Linear guided path',
+        informationLayering: 'Emotional layer emphasis',
+        audioPreference: 'Interactive audio feedback',
+        visualEffectsLevel: 'Moderate',
+        culturalContext: 'Word-of-mouth',
+        motives: ['Enjoy the art and characters of the game', 'Clear and intuitive interaction prompts', 'Objective notifications and aids']
       },
       {
         name: 'Themba',
-        title: 'The Heritage Seeker',
-        primaryColor: '#22c55e', // green
+        title: 'The heritage seeker',
+        primaryColor: '#10b981', // emerald
+        gender: 'Male',
+        ageGroup: '25-34',
+        origin: 'Local',
         focusType: 'Interaction-focused',
         sessionLength: 'Short sessions (5-15 min)',
         platformPref: 'Mobile user',
@@ -199,46 +356,40 @@ const XRPersonaGenerator = () => {
         informationLayering: 'Core narrative focus',
         audioPreference: 'Narration focused',
         visualEffectsLevel: 'Subtle',
-        culturalContext: 'Personal heritage connection',
+        culturalContext: 'Connect with heritage',
         motives: ['Connect with heritage', 'Share on social media', 'Brief, impactful experiences']
       },
       {
-        name: 'Nomvula',
-        title: 'The Cultural Connection Seeker',
-        primaryColor: '#a855f7', // purple
-        focusType: 'Emotionally-driven',
-        sessionLength: 'Medium-long sessions',
-        platformPref: 'Values personal stories',
-        xrExperienceLevel: 'XR comfortable',
+        name: 'Aisha',
+        title: 'The international tourist',
+        primaryColor: '#dc2626', // red
+        gender: 'Female',
+        ageGroup: '35-44',
+        origin: 'International',
+        focusType: 'Story-focused',
+        sessionLength: 'Medium sessions (10-20 min)',
+        platformPref: 'No platform preference',
+        xrExperienceLevel: 'XR novice',
         accessibilityNeeds: ['Multiple language options'],
         interactionPreferences: ['Audio Integration'],
-        spatialInteractionModel: 'Fixed viewpoints',
-        navigationParadigm: 'Hybrid approach',
-        informationLayering: 'Emotional layer emphasis',
-        audioPreference: 'Ambient soundscapes',
-        visualEffectsLevel: 'Immersive',
-        culturalContext: 'Intergenerational sharing',
-        motives: ['Heritage connection', 'Emotional resonance', 'Intergenerational sharing']
-      },
-      {
-        name: 'Michael',
-        title: 'The International Visitor',
-        primaryColor: '#10b981', // emerald
-        focusType: 'Context-focused',
-        sessionLength: 'Short-medium sessions',
-        platformPref: 'Needs clear guidance',
-        xrExperienceLevel: 'XR novice',
-        accessibilityNeeds: ['Multiple language options', 'Audio descriptions'],
-        interactionPreferences: ['Visual Effects', 'Interactive Navigation'],
         spatialInteractionModel: 'Guided tour',
         navigationParadigm: 'Linear guided path',
         informationLayering: 'Context layer preference',
         audioPreference: 'Narration focused',
         visualEffectsLevel: 'Moderate',
-        culturalContext: 'Global relevance connections',
-        motives: ['Basic historical context', 'Enhancement of physical visit', 'Global relevance']
+        culturalContext: 'Learn about apartheid',
+        motives: ['Learn about apartheid', 'Emotional connection', 'Language accessibility']
       }
     ];
+    
+    const randomPersona = personas[Math.floor(Math.random() * personas.length)];
+    setFormData(randomPersona);
+    
+    // Need to delay the SVG generation to ensure state is updated
+    setTimeout(() => {
+      generatePersonaSVG();
+    }, 100);
+  };
     
     const randomPersona = personas[Math.floor(Math.random() * personas.length)];
     setFormData(randomPersona);
@@ -288,6 +439,51 @@ const XRPersonaGenerator = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 placeholder="e.g. The heritage seeker"
               />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                >
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Non-binary">Non-binary</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Age Group</label>
+                <select
+                  name="ageGroup"
+                  value={formData.ageGroup}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                >
+                  <option value="18-24">18-24</option>
+                  <option value="25-34">25-34</option>
+                  <option value="35-44">35-44</option>
+                  <option value="45-54">45-54</option>
+                  <option value="55+">55+</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Origin</label>
+              <select
+                name="origin"
+                value={formData.origin}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="Local">Local</option>
+                <option value="International">International</option>
+              </select>
             </div>
             
             <div>
