@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const PersonaGenerator = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ const PersonaGenerator = () => {
   });
   
   const [generatedSVG, setGeneratedSVG] = useState('');
+  const svgContainerRef = useRef(null);
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,38 +46,124 @@ const PersonaGenerator = () => {
         <path d="M130,100 Q150,120 170,100" stroke="black" stroke-width="2" fill="none"/>
         
         <!-- Name and Title -->
-        <text x="150" y="220" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">${formData.name}</text>
-        <text x="150" y="250" font-family="Arial" font-size="16" text-anchor="middle">${formData.title}</text>
+        <text x="150" y="220" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">${formData.name || "Name"}</text>
+        <text x="150" y="250" font-family="Arial" font-size="16" text-anchor="middle">${formData.title || "Title"}</text>
         
         <!-- Characteristics -->
-        <rect x="60" y="270" width="${formData.focusType.length * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
+        <rect x="60" y="270" width="${(formData.focusType?.length || 10) * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
         <text x="75" y="290" font-family="Arial" font-size="14">${formData.focusType}</text>
         
-        <rect x="60" y="310" width="${formData.sessionLength.length * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
+        <rect x="60" y="310" width="${(formData.sessionLength?.length || 10) * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
         <text x="75" y="330" font-family="Arial" font-size="14">${formData.sessionLength}</text>
         
-        <rect x="60" y="350" width="${formData.platformPref.length * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
+        <rect x="60" y="350" width="${(formData.platformPref?.length || 10) * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
         <text x="75" y="370" font-family="Arial" font-size="14">${formData.platformPref}</text>
         
         <!-- Interaction Motives -->
         <text x="60" y="410" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
         <circle cx="70" cy="430" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="435" font-family="Arial" font-size="14">${formData.motives[0]}</text>
+        <text x="85" y="435" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
         
         <circle cx="70" cy="455" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="460" font-family="Arial" font-size="14">${formData.motives[1]}</text>
+        <text x="85" y="460" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
         
         <circle cx="70" cy="480" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="485" font-family="Arial" font-size="14">${formData.motives[2]}</text>
+        <text x="85" y="485" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
       </svg>
     `;
     
     setGeneratedSVG(svg);
   };
   
+  const downloadSVG = () => {
+    if (!generatedSVG) return;
+    
+    const blob = new Blob([generatedSVG], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${formData.name.toLowerCase() || 'persona'}-persona.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+  
+  const downloadPNG = () => {
+    if (!generatedSVG || !svgContainerRef.current) return;
+    
+    // Create an image with the SVG data
+    const img = new Image();
+    const svgBlob = new Blob([generatedSVG], {type: 'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(svgBlob);
+    
+    img.onload = () => {
+      // Create a canvas to render the image
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 500;
+      const ctx = canvas.getContext('2d');
+      
+      // Draw a white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the image
+      ctx.drawImage(img, 0, 0);
+      
+      // Convert to PNG and download
+      canvas.toBlob((blob) => {
+        const pngUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = pngUrl;
+        a.download = `${formData.name.toLowerCase() || 'persona'}-persona.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(pngUrl);
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    };
+    
+    img.src = url;
+  };
+  
+  // Generate a random persona for demonstration
+  const generateRandomPersona = () => {
+    const focusTypes = ['Interaction-focused', 'Story-focused', 'Content-focused', 'Detail-oriented'];
+    const sessionLengths = ['Short sessions', 'Medium sessions', 'Long sessions'];
+    const platformPrefs = ['Mobile user', 'No platform preference', 'Prefers console', 'Prefers PC'];
+    
+    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    
+    setFormData({
+      name: 'Example Persona',
+      title: 'The User Archetype',
+      primaryColor: randomColor,
+      focusType: focusTypes[Math.floor(Math.random() * focusTypes.length)],
+      sessionLength: sessionLengths[Math.floor(Math.random() * sessionLengths.length)],
+      platformPref: platformPrefs[Math.floor(Math.random() * platformPrefs.length)],
+      motives: ['Discover new content', 'Engage with others', 'Create something unique']
+    });
+    
+    // Need to delay the SVG generation to ensure state is updated
+    setTimeout(() => {
+      generatePersonaSVG();
+    }, 100);
+  };
+  
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6 text-center">XR Persona Generator</h1>
+      
+      <div className="mb-4 text-center">
+        <button
+          onClick={generateRandomPersona}
+          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 mb-4"
+        >
+          Generate Example Persona
+        </button>
+      </div>
       
       <div className="flex flex-wrap gap-8">
         <div className="w-full lg:w-1/2">
@@ -107,13 +194,16 @@ const PersonaGenerator = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Primary Color</label>
-              <input
-                type="color"
-                name="primaryColor"
-                value={formData.primaryColor}
-                onChange={handleInputChange}
-                className="w-full p-1 border border-gray-300 rounded-md h-10"
-              />
+              <div className="flex space-x-2">
+                <input
+                  type="color"
+                  name="primaryColor"
+                  value={formData.primaryColor}
+                  onChange={handleInputChange}
+                  className="w-full p-1 border border-gray-300 rounded-md h-10"
+                />
+                <span className="py-2 text-sm text-gray-500">{formData.primaryColor}</span>
+              </div>
             </div>
             
             <div>
@@ -187,7 +277,7 @@ const PersonaGenerator = () => {
           <div className="border border-gray-300 rounded-md p-4 h-full flex flex-col">
             <h2 className="text-xl font-semibold mb-4 text-center">Preview</h2>
             {generatedSVG ? (
-              <div className="flex-grow flex items-center justify-center">
+              <div ref={svgContainerRef} className="flex-grow flex items-center justify-center">
                 <div dangerouslySetInnerHTML={{ __html: generatedSVG }} />
               </div>
             ) : (
@@ -196,26 +286,27 @@ const PersonaGenerator = () => {
               </div>
             )}
             {generatedSVG && (
-              <div className="mt-4 text-center">
+              <div className="mt-4 flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2 justify-center">
                 <button
                   className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-                  onClick={() => {
-                    const blob = new Blob([generatedSVG], { type: 'image/svg+xml' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${formData.name.toLowerCase()}-persona.svg`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                  }}
+                  onClick={downloadSVG}
                 >
                   Download SVG
+                </button>
+                <button
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                  onClick={downloadPNG}
+                >
+                  Download PNG
                 </button>
               </div>
             )}
           </div>
         </div>
+      </div>
+      
+      <div className="mt-8 text-center text-sm text-gray-500">
+        <p>Created personas represent user archetypes for experience design.</p>
       </div>
     </div>
   );
