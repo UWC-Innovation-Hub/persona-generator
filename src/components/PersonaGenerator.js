@@ -110,19 +110,8 @@ const XRPersonaGenerator = () => {
       <text x="150" y="177" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Platform: ${formData.platformChoice}</text>
     `;
     
-    // Create XR Preferences section
-    const xrPreferencesSection = `
-      <!-- XR Preferences -->
-      <rect x="235" y="115" width="160" height="145" rx="5" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
-      <text x="315" y="132" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">XR Preferences</text>
-      <text x="245" y="152" font-family="Arial" font-size="11" fill="#555">• Spatial: ${formData.spatialInteractionModel.split('(')[0]}</text>
-      <text x="245" y="169" font-family="Arial" font-size="11" fill="#555">• Navigation: ${formData.navigationParadigm.split('(')[0]}</text>
-      <text x="245" y="186" font-family="Arial" font-size="11" fill="#555">• Info Layer: ${formData.informationLayering.split('(')[0]}</text>
-      <text x="245" y="203" font-family="Arial" font-size="11" fill="#555">• Audio: ${formData.audioPreference}</text>
-      <text x="245" y="220" font-family="Arial" font-size="11" fill="#555">• Visual: ${formData.visualEffectsLevel}</text>
-      <text x="245" y="237" font-family="Arial" font-size="11" fill="#555">• Session: ${formData.sessionLength}</text>
-      <text x="245" y="254" font-family="Arial" font-size="11" fill="#555">• XR Level: ${formData.xrExperienceLevel}</text>
-    `;
+    // We no longer need a separate XR Preferences section as it's integrated directly in the SVG
+    const xrPreferencesSection = ``;
     
     // Create accessibility needs section with better text wrapping
     let accessibilitySection = '';
@@ -155,7 +144,7 @@ const XRPersonaGenerator = () => {
     }
     
     const svg = `
-      <svg width="400" height="390" xmlns="http://www.w3.org/2000/svg">
+      <svg width="300" height="390" xmlns="http://www.w3.org/2000/svg">
         <!-- Avatar Section -->
         ${avatarGraphic}
         
@@ -166,31 +155,45 @@ const XRPersonaGenerator = () => {
         <!-- Demographic Information -->
         ${demographicInfo}
         
-        <!-- XR Preferences -->
-        ${xrPreferencesSection}
-        
-        <!-- Interaction Preferences -->
-        ${interactionPrefsSection}
-        
         <!-- Characteristics -->
-        <rect x="60" y="225" width="150" height="25" rx="12" fill="#f3f4f6"/>
-        <text x="135" y="242" font-family="Arial" font-size="12" text-anchor="middle">${formData.focusType}</text>
+        <rect x="75" y="225" width="150" height="25" rx="12" fill="#f3f4f6"/>
+        <text x="150" y="242" font-family="Arial" font-size="12" text-anchor="middle">${formData.focusType}</text>
         
-        <!-- Interaction Motives - Now with color-coded bullets -->
-        <text x="60" y="265" font-family="Arial" font-size="14" font-weight="bold">Interaction Motives</text>
-        <circle cx="68" cy="280" r="4" fill="${formData.primaryColor}"/>
-        <text x="80" y="284" font-family="Arial" font-size="11">${formData.motives[0] || "Not specified"}</text>
+        <!-- XR Preferences - Moved to right side but more compact -->
+        <rect x="60" y="260" width="180" height="130" rx="5" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
+        <text x="150" y="275" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">XR Preferences</text>
+        <text x="70" y="290" font-family="Arial" font-size="11" fill="#555">• Spatial: ${formData.spatialInteractionModel.split('(')[0]}</text>
+        <text x="70" y="305" font-family="Arial" font-size="11" fill="#555">• Navigation: ${formData.navigationParadigm.split('(')[0]}</text>
+        <text x="70" y="320" font-family="Arial" font-size="11" fill="#555">• Info Layer: ${formData.informationLayering.split('(')[0]}</text>
+        <text x="70" y="335" font-family="Arial" font-size="11" fill="#555">• Audio: ${formData.audioPreference}</text>
+        <text x="70" y="350" font-family="Arial" font-size="11" fill="#555">• Visual: ${formData.visualEffectsLevel}</text>
+        <text x="70" y="365" font-family="Arial" font-size="11" fill="#555">• Session: ${formData.sessionLength}</text>
+        <text x="70" y="380" font-family="Arial" font-size="11" fill="#555">• XR Level: ${formData.xrExperienceLevel}</text>
         
-        <circle cx="68" cy="300" r="4" fill="${formData.primaryColor}"/>
-        <text x="80" y="304" font-family="Arial" font-size="11">${formData.motives[1] || "Not specified"}</text>
+        <!-- Interaction Preferences - On a second SVG page -->
+        <text x="60" y="400" font-family="Arial" font-size="14" font-weight="bold">Interaction Preferences</text>
+        ${formData.interactionPreferences.length > 0 
+          ? formData.interactionPreferences.map((pref, index) => 
+              `<text x="70" y="${415 + index * 15}" font-family="Arial" font-size="11">• ${pref}</text>`
+            ).join('')
+          : `<text x="70" y="415" font-family="Arial" font-size="11">• None specified</text>`
+        }
         
-        <circle cx="68" cy="320" r="4" fill="${formData.primaryColor}"/>
-        <text x="80" y="324" font-family="Arial" font-size="11">${formData.motives[2] || "Not specified"}</text>
+        <!-- Interaction Motives - On a second SVG page -->
+        <text x="60" y="450" font-family="Arial" font-size="14" font-weight="bold">Interaction Motives</text>
+        <circle cx="68" cy="465" r="4" fill="${formData.primaryColor}"/>
+        <text x="80" y="469" font-family="Arial" font-size="11">${formData.motives[0] || "Not specified"}</text>
+        
+        <circle cx="68" cy="485" r="4" fill="${formData.primaryColor}"/>
+        <text x="80" y="489" font-family="Arial" font-size="11">${formData.motives[1] || "Not specified"}</text>
+        
+        <circle cx="68" cy="505" r="4" fill="${formData.primaryColor}"/>
+        <text x="80" y="509" font-family="Arial" font-size="11">${formData.motives[2] || "Not specified"}</text>
         
         <!-- Cultural Context -->
         ${formData.culturalContext ? `
-        <text x="60" y="350" font-family="Arial" font-size="14" font-weight="bold">Cultural Context</text>
-        <text x="80" y="370" font-family="Arial" font-size="11">${formData.culturalContext}</text>
+        <text x="60" y="530" font-family="Arial" font-size="14" font-weight="bold">Cultural Context</text>
+        <text x="70" y="545" font-family="Arial" font-size="11">${formData.culturalContext}</text>
         ` : ''}
         
         <!-- Accessibility needs section -->
@@ -229,7 +232,7 @@ const XRPersonaGenerator = () => {
   
       const canvas = document.createElement('canvas');
       // Set canvas dimensions 3x larger than SVG
-      canvas.width = 400 * scaleFactor;
+      canvas.width = 300 * scaleFactor;
       canvas.height = svgHeight * scaleFactor;
       
       const ctx = canvas.getContext('2d');
@@ -239,7 +242,7 @@ const XRPersonaGenerator = () => {
       // Draw white background and image
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, 400, svgHeight);
+      ctx.drawImage(img, 0, 0, 300, svgHeight);
   
       canvas.toBlob((blob) => {
         const pngUrl = URL.createObjectURL(blob);
@@ -749,8 +752,8 @@ const XRPersonaGenerator = () => {
             <div className="border border-gray-300 rounded-md p-4 h-full flex flex-col">
               <h2 className="text-lg font-semibold mb-2 text-center">Preview</h2>
               {generatedSVG ? (
-                <div ref={svgContainerRef} className="flex-grow flex items-center justify-center">
-                  <div dangerouslySetInnerHTML={{ __html: generatedSVG }} />
+                <div ref={svgContainerRef} className="flex-grow flex items-center justify-center overflow-auto">
+                  <div dangerouslySetInnerHTML={{ __html: generatedSVG }} className="w-full" />
                 </div>
               ) : (
                 <div className="flex-grow flex items-center justify-center text-gray-500 text-sm">
