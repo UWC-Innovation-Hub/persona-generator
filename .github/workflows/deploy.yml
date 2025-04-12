@@ -19,7 +19,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci  # Uses package-lock.json for exact versions
+      run: npm install  # Generate package-lock.json if it doesn't exist
       
     - name: Build
       run: npm run build
