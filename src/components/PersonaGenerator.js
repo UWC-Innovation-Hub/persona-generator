@@ -406,14 +406,6 @@ const XRPersonaGenerator = () => {
     setTimeout(() => {
       generatePersonaSVG();
     }, 100);
-    
-    const randomPersona = personas[Math.floor(Math.random() * personas.length)];
-    setFormData(randomPersona);
-    
-    // Need to delay the SVG generation to ensure state is updated
-    setTimeout(() => {
-      generatePersonaSVG();
-    }, 100);
   };
   
   };
