@@ -227,31 +227,30 @@ const XRPersonaGenerator = () => {
   
   const downloadPNG = () => {
     if (!generatedSVG || !svgContainerRef.current) return;
-    
-    // Create an image with the SVG data
+  
+    const scaleFactor = 3; // Triple the resolution for print
     const img = new Image();
-    const svgBlob = new Blob([generatedSVG], {type: 'image/svg+xml;charset=utf-8'});
+    const svgBlob = new Blob([generatedSVG], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(svgBlob);
-    
+  
     img.onload = () => {
-      // Get the SVG height from the content for proper scaling
       const heightMatch = generatedSVG.match(/height="([^"]+)"/);
       const svgHeight = heightMatch ? parseInt(heightMatch[1]) : 580;
-      
-      // Create a canvas to render the image
+  
       const canvas = document.createElement('canvas');
-      canvas.width = 300;
-      canvas.height = svgHeight; // Dynamic height based on content
-      const ctx = canvas.getContext('2d');
+      // Set canvas dimensions 3x larger than SVG
+      canvas.width = 300 * scaleFactor;
+      canvas.height = svgHeight * scaleFactor;
       
-      // Draw a white background
+      const ctx = canvas.getContext('2d');
+      // Scale context to maintain crisp edges
+      ctx.scale(scaleFactor, scaleFactor);
+      
+      // Draw white background and image
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw the image
-      ctx.drawImage(img, 0, 0);
-      
-      // Convert to PNG and download
+      ctx.drawImage(img, 0, 0, 300, svgHeight);
+  
       canvas.toBlob((blob) => {
         const pngUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -264,7 +263,7 @@ const XRPersonaGenerator = () => {
         URL.revokeObjectURL(url);
       }, 'image/png');
     };
-    
+  
     img.src = url;
   };
   
