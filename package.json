@@ -2,7 +2,7 @@
   "name": "persona-generator",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://uwc-innovation-hub.io/persona-generator",
+  "homepage": "https://uwc-innovation-hub.github.io/persona-generator/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
