@@ -147,8 +147,23 @@ const XRPersonaGenerator = () => {
       <text x="60" y="60" font-family="Arial" font-size="12" text-anchor="middle" fill="#777">${formData.ageGroup}</text>
     `;
     
+    // Create accessibility needs section with better text wrapping
+    let accessibilitySection = '';
+    if (formData.accessibilityNeeds?.length > 0) {
+      accessibilitySection = `
+        <text x="60" y="550" font-family="Arial" font-size="14" font-weight="bold">Accessibility Needs:</text>
+      `;
+      
+      // Add each accessibility need on its own line
+      formData.accessibilityNeeds.forEach((need, index) => {
+        accessibilitySection += `
+          <text x="70" y="${565 + index * 18}" font-family="Arial" font-size="12">• ${need}</text>
+        `;
+      });
+    }
+    
     const svg = `
-      <svg width="300" height="580" xmlns="http://www.w3.org/2000/svg">
+      <svg width="300" height="${580 + (formData.accessibilityNeeds?.length || 0) * 20}" xmlns="http://www.w3.org/2000/svg">
         <!-- Outer Circle -->
         <circle cx="150" cy="100" r="80" fill="white" stroke="${formData.primaryColor}" stroke-width="6"/>
         
@@ -188,10 +203,8 @@ const XRPersonaGenerator = () => {
         <circle cx="70" cy="520" r="5" fill="${formData.primaryColor}"/>
         <text x="85" y="525" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
         
-        <!-- If accessibility needs are specified -->
-        ${formData.accessibilityNeeds?.length > 0 ? `
-          <text x="60" y="550" font-family="Arial" font-size="14" font-weight="bold">Accessibility: ${formData.accessibilityNeeds.join(', ')}</text>
-        ` : ''}
+        <!-- Accessibility needs section -->
+        ${accessibilitySection}
       </svg>
     `;
     
@@ -221,10 +234,14 @@ const XRPersonaGenerator = () => {
     const url = URL.createObjectURL(svgBlob);
     
     img.onload = () => {
+      // Get the SVG height from the content for proper scaling
+      const heightMatch = generatedSVG.match(/height="([^"]+)"/);
+      const svgHeight = heightMatch ? parseInt(heightMatch[1]) : 580;
+      
       // Create a canvas to render the image
       const canvas = document.createElement('canvas');
       canvas.width = 300;
-      canvas.height = 580; // Match SVG height
+      canvas.height = svgHeight; // Dynamic height based on content
       const ctx = canvas.getContext('2d');
       
       // Draw a white background
