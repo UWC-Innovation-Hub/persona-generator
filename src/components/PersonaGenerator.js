@@ -406,7 +406,6 @@ const XRPersonaGenerator = () => {
     setTimeout(() => {
       generatePersonaSVG();
     }, 100);
-  };
     
     const randomPersona = personas[Math.floor(Math.random() * personas.length)];
     setFormData(randomPersona);
@@ -415,6 +414,8 @@ const XRPersonaGenerator = () => {
     setTimeout(() => {
       generatePersonaSVG();
     }, 100);
+  };
+  
   };
   
   return (
