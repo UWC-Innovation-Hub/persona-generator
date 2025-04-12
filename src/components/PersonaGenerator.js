@@ -12,6 +12,13 @@ const XRPersonaGenerator = () => {
     xrExperienceLevel: 'XR novice',
     accessibilityNeeds: [],
     interactionPreferences: [],
+    // XR spatial interaction preferences
+    spatialInteractionModel: 'Object manipulation',
+    navigationParadigm: 'Linear guided path',
+    informationLayering: 'Core narrative focus',
+    // Sensory preferences
+    audioPreference: 'Minimal audio',
+    visualEffectsLevel: 'Subtle',
     // Heritage-specific for museum/education contexts
     culturalContext: '',
     // Interaction motives with color coding
@@ -117,6 +124,45 @@ const XRPersonaGenerator = () => {
     URL.revokeObjectURL(url);
   };
   
+  const downloadPNG = () => {
+    if (!generatedSVG || !svgContainerRef.current) return;
+    
+    // Create an image with the SVG data
+    const img = new Image();
+    const svgBlob = new Blob([generatedSVG], {type: 'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(svgBlob);
+    
+    img.onload = () => {
+      // Create a canvas to render the image
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 580; // Match SVG height
+      const ctx = canvas.getContext('2d');
+      
+      // Draw a white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the image
+      ctx.drawImage(img, 0, 0);
+      
+      // Convert to PNG and download
+      canvas.toBlob((blob) => {
+        const pngUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = pngUrl;
+        a.download = `${formData.name.toLowerCase() || 'xr-persona'}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(pngUrl);
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    };
+    
+    img.src = url;
+  };
+  
   const generateRandomPersona = () => {
     // Examples inspired by the provided persona images
     const personas = [
@@ -130,6 +176,11 @@ const XRPersonaGenerator = () => {
         xrExperienceLevel: 'XR enthusiast',
         accessibilityNeeds: ['Low-bandwidth alternatives'],
         interactionPreferences: ['3D Exploration', 'Interactive Navigation'],
+        spatialInteractionModel: 'Object manipulation',
+        navigationParadigm: 'Non-linear exploration',
+        informationLayering: 'Interactive layer priority',
+        audioPreference: 'Minimal audio',
+        visualEffectsLevel: 'Moderate',
         culturalContext: 'Local heritage connection',
         motives: ['Digital innovation focus', 'Social media sharing', 'Quick, impactful experiences']
       },
@@ -138,11 +189,16 @@ const XRPersonaGenerator = () => {
         title: 'The Heritage Seeker',
         primaryColor: '#22c55e', // green
         focusType: 'Interaction-focused',
-        sessionLength: 'Short sessions',
+        sessionLength: 'Short sessions (5-15 min)',
         platformPref: 'Mobile user',
         xrExperienceLevel: 'XR novice',
         accessibilityNeeds: [],
         interactionPreferences: ['Audio Integration', 'Visual Effects'],
+        spatialInteractionModel: 'Guided tour',
+        navigationParadigm: 'Linear guided path',
+        informationLayering: 'Core narrative focus',
+        audioPreference: 'Narration focused',
+        visualEffectsLevel: 'Subtle',
         culturalContext: 'Personal heritage connection',
         motives: ['Connect with heritage', 'Share on social media', 'Brief, impactful experiences']
       },
@@ -156,8 +212,31 @@ const XRPersonaGenerator = () => {
         xrExperienceLevel: 'XR comfortable',
         accessibilityNeeds: ['Multiple language options'],
         interactionPreferences: ['Audio Integration'],
+        spatialInteractionModel: 'Fixed viewpoints',
+        navigationParadigm: 'Hybrid approach',
+        informationLayering: 'Emotional layer emphasis',
+        audioPreference: 'Ambient soundscapes',
+        visualEffectsLevel: 'Immersive',
         culturalContext: 'Intergenerational sharing',
         motives: ['Heritage connection', 'Emotional resonance', 'Intergenerational sharing']
+      },
+      {
+        name: 'Michael',
+        title: 'The International Visitor',
+        primaryColor: '#10b981', // emerald
+        focusType: 'Context-focused',
+        sessionLength: 'Short-medium sessions',
+        platformPref: 'Needs clear guidance',
+        xrExperienceLevel: 'XR novice',
+        accessibilityNeeds: ['Multiple language options', 'Audio descriptions'],
+        interactionPreferences: ['Visual Effects', 'Interactive Navigation'],
+        spatialInteractionModel: 'Guided tour',
+        navigationParadigm: 'Linear guided path',
+        informationLayering: 'Context layer preference',
+        audioPreference: 'Narration focused',
+        visualEffectsLevel: 'Moderate',
+        culturalContext: 'Global relevance connections',
+        motives: ['Basic historical context', 'Enhancement of physical visit', 'Global relevance']
       }
     ];
     
@@ -307,9 +386,84 @@ const XRPersonaGenerator = () => {
             </div>
             
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Spatial Interaction Model</label>
+              <select
+                name="spatialInteractionModel"
+                value={formData.spatialInteractionModel}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="Object manipulation">Object manipulation (spin, zoom, exploded views)</option>
+                <option value="Fixed viewpoints">Fixed viewpoints (preset perspectives)</option>
+                <option value="Free exploration">Free exploration (user-controlled camera)</option>
+                <option value="Guided tour">Guided tour (automated movement)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Navigation Paradigm</label>
+              <select
+                name="navigationParadigm"
+                value={formData.navigationParadigm}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="Linear guided path">Linear guided path</option>
+                <option value="Non-linear exploration">Non-linear exploration ("Go to Step" actions)</option>
+                <option value="Free roaming">Free roaming (complete freedom)</option>
+                <option value="Hybrid approach">Hybrid approach (both guided and free)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Information Layering</label>
+              <select
+                name="informationLayering"
+                value={formData.informationLayering}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="Core narrative focus">Core narrative focus (essential historical facts)</option>
+                <option value="Interactive layer priority">Interactive layer priority (explorable details)</option>
+                <option value="Emotional layer emphasis">Emotional layer emphasis (personal testimonies)</option>
+                <option value="Context layer preference">Context layer preference (global connections)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Audio Preference</label>
+              <select
+                name="audioPreference"
+                value={formData.audioPreference}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="Minimal audio">Minimal audio</option>
+                <option value="Narration focused">Narration focused</option>
+                <option value="Ambient soundscapes">Ambient soundscapes</option>
+                <option value="Interactive audio feedback">Interactive audio feedback</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Visual Effects Level</label>
+              <select
+                name="visualEffectsLevel"
+                value={formData.visualEffectsLevel}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="Subtle">Subtle (minimalist approach)</option>
+                <option value="Moderate">Moderate (balanced effects)</option>
+                <option value="Immersive">Immersive (rich visual feedback)</option>
+                <option value="Adaptive">Adaptive (context-sensitive)</option>
+              </select>
+            </div>
+            
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Accessibility Needs</label>
               <div className="flex flex-wrap gap-2 mt-1">
-                {['Multiple language options', 'Low-bandwidth alternatives', 'Text formatting for emphasis'].map(need => (
+                {['Multiple language options', 'Low-bandwidth alternatives', 'Text formatting for emphasis', 'Audio descriptions', 'Motion sensitivity options'].map(need => (
                   <label key={need} className="inline-flex items-center">
                     <input
                       type="checkbox"
@@ -378,6 +532,12 @@ const XRPersonaGenerator = () => {
                 >
                   Download SVG
                 </button>
+                <button
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                  onClick={downloadPNG}
+                >
+                  Download PNG
+                </button>
               </div>
             )}
           </div>
@@ -386,13 +546,44 @@ const XRPersonaGenerator = () => {
       
       <div className="mt-8 text-sm text-gray-600 p-4 bg-gray-100 rounded-md">
         <h3 className="font-semibold mb-2">XR Persona Usage Guidelines</h3>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>Use personas to inform interaction design decisions for digital heritage experiences</li>
-          <li>Consider accessibility needs when designing XR interfaces</li>
-          <li>Tailor session length to match persona preferences</li>
-          <li>Design interactions that match the persona's experience level</li>
-          <li>Create content that resonates with the persona's cultural context and motives</li>
-        </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <h4 className="font-medium mb-1">Interaction Design</h4>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Match spatial interaction model to persona's XR experience level</li>
+              <li>Design navigation flows based on persona's navigation paradigm preference</li>
+              <li>Layer information according to persona's information layering preference</li>
+              <li>Tailor session length to match persona attention spans</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-1">Content & Experience</h4>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Balance audio elements based on persona's audio preference</li>
+              <li>Adjust visual effects intensity to match persona comfort level</li>
+              <li>Create content that resonates with the persona's cultural context</li>
+              <li>Design interactions that fulfill the persona's primary motives</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-1">Accessibility Considerations</h4>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Implement multiple language options for international visitors</li>
+              <li>Provide low-bandwidth alternatives for mobile-first users</li>
+              <li>Include audio descriptions for enhanced accessibility</li>
+              <li>Add motion sensitivity options for comfortable viewing</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-1">XR-Specific Design</h4>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Consider viewing device constraints (mobile vs headset)</li>
+              <li>Design for cognitive load appropriate to experience level</li>
+              <li>Balance between guided experiences and free exploration</li>
+              <li>Implement "Go to Step" actions for non-linear navigation</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
