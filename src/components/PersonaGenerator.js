@@ -110,9 +110,7 @@ const XRPersonaGenerator = () => {
       <text x="150" y="177" font-family="Arial" font-size="12" text-anchor="middle" fill="#555">Platform: ${formData.platformChoice}</text>
     `;
     
-    // We no longer need a separate XR Preferences section as it's integrated directly in the SVG
-    const xrPreferencesSection = ``;
-    
+    // No longer need these sections as they're integrated directly in the SVG template
     // Create accessibility needs section with better text wrapping
     let accessibilitySection = '';
     if (formData.accessibilityNeeds?.length > 0) {
@@ -128,20 +126,7 @@ const XRPersonaGenerator = () => {
       });
     }
     
-    // Create interaction preferences section
-    let interactionPrefsSection = '';
-    if (formData.interactionPreferences?.length > 0) {
-      interactionPrefsSection = `
-        <text x="230" y="290" font-family="Arial" font-size="14" font-weight="bold">Interaction Preferences:</text>
-      `;
-      
-      // Add each interaction preference
-      formData.interactionPreferences.forEach((pref, index) => {
-        interactionPrefsSection += `
-          <text x="240" y="${305 + index * 18}" font-family="Arial" font-size="11">• ${pref}</text>
-        `;
-      });
-    }
+    // Create interaction preferences section - integrated directly in SVG
     
     const svg = `
       <svg width="300" height="390" xmlns="http://www.w3.org/2000/svg">
