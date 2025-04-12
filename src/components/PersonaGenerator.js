@@ -117,7 +117,7 @@ const XRPersonaGenerator = () => {
     // Create interaction preferences section - integrated directly in SVG
     
     const svg = `
-      <svg width="300" height="600" xmlns="http://www.w3.org/2000/svg">
+      <svg width="300" height="750" xmlns="http://www.w3.org/2000/svg">
         <!-- Avatar Section -->
         ${avatarGraphic}
         
@@ -132,48 +132,47 @@ const XRPersonaGenerator = () => {
         <rect x="75" y="225" width="150" height="25" rx="12" fill="#f3f4f6"/>
         <text x="150" y="242" font-family="Arial" font-size="12" text-anchor="middle">${formData.focusType}</text>
         
-        <!-- XR Preferences - Moved to right side but more compact -->
-        <rect x="60" y="260" width="180" height="140" rx="5" fill="#f9f9f9" stroke="#ddd" stroke-width="1"/>
-        <text x="150" y="280" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">XR Preferences</text>
-        <text x="70" y="300" font-family="Arial" font-size="11" fill="#555">• Spatial: ${formData.spatialInteractionModel.split('(')[0]}</text>
-        <text x="70" y="320" font-family="Arial" font-size="11" fill="#555">• Navigation: ${formData.navigationParadigm.split('(')[0]}</text>
-        <text x="70" y="340" font-family="Arial" font-size="11" fill="#555">• Info Layer: ${formData.informationLayering.split('(')[0]}</text>
-        <text x="70" y="360" font-family="Arial" font-size="11" fill="#555">• Audio: ${formData.audioPreference}</text>
-        <text x="70" y="380" font-family="Arial" font-size="11" fill="#555">• Visual: ${formData.visualEffectsLevel}</text>
-        <text x="70" y="400" font-family="Arial" font-size="11" fill="#555">• Session: ${formData.sessionLength}</text>
-        <text x="70" y="420" font-family="Arial" font-size="11" fill="#555">• XR Level: ${formData.xrExperienceLevel}</text>
+        <!-- XR Preferences - Now without background rectangle -->
+        <text x="150" y="280" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">XR Preferences</text>
+        <text x="70" y="310" font-family="Arial" font-size="12" fill="#555">• Spatial: ${formData.spatialInteractionModel.split('(')[0]}</text>
+        <text x="70" y="335" font-family="Arial" font-size="12" fill="#555">• Navigation: ${formData.navigationParadigm.split('(')[0]}</text>
+        <text x="70" y="360" font-family="Arial" font-size="12" fill="#555">• Info Layer: ${formData.informationLayering.split('(')[0]}</text>
+        <text x="70" y="385" font-family="Arial" font-size="12" fill="#555">• Audio: ${formData.audioPreference}</text>
+        <text x="70" y="410" font-family="Arial" font-size="12" fill="#555">• Visual: ${formData.visualEffectsLevel}</text>
+        <text x="70" y="435" font-family="Arial" font-size="12" fill="#555">• Session: ${formData.sessionLength}</text>
+        <text x="70" y="460" font-family="Arial" font-size="12" fill="#555">• XR Level: ${formData.xrExperienceLevel}</text>
         
         <!-- Interaction Preferences - With more spacing -->
-        <text x="60" y="450" font-family="Arial" font-size="14" font-weight="bold">Interaction Preferences</text>
+        <text x="150" y="500" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Interaction Preferences</text>
         ${formData.interactionPreferences.length > 0 
           ? formData.interactionPreferences.map((pref, index) => 
-              `<text x="70" y="${470 + index * 20}" font-family="Arial" font-size="11">• ${pref}</text>`
+              `<text x="70" y="${525 + index * 25}" font-family="Arial" font-size="12">• ${pref}</text>`
             ).join('')
-          : `<text x="70" y="470" font-family="Arial" font-size="11">• None specified</text>`
+          : `<text x="70" y="525" font-family="Arial" font-size="12">• None specified</text>`
         }
         
         <!-- Interaction Motives - With more spacing -->
-        <text x="60" y="${470 + (formData.interactionPreferences.length || 1) * 20 + 10}" font-family="Arial" font-size="14" font-weight="bold">Interaction Motives</text>
-        <circle cx="68" cy="${470 + (formData.interactionPreferences.length || 1) * 20 + 30}" r="4" fill="${formData.primaryColor}"/>
-        <text x="80" y="${470 + (formData.interactionPreferences.length || 1) * 20 + 34}" font-family="Arial" font-size="11">${formData.motives[0] || "Not specified"}</text>
+        <text x="150" y="${570 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Interaction Motives</text>
+        <circle cx="68" cy="${595 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="${600 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" font-family="Arial" font-size="12">${formData.motives[0] || "Not specified"}</text>
         
-        <circle cx="68" cy="${470 + (formData.interactionPreferences.length || 1) * 20 + 50}" r="4" fill="${formData.primaryColor}"/>
-        <text x="80" y="${470 + (formData.interactionPreferences.length || 1) * 20 + 54}" font-family="Arial" font-size="11">${formData.motives[1] || "Not specified"}</text>
+        <circle cx="68" cy="${625 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="${630 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" font-family="Arial" font-size="12">${formData.motives[1] || "Not specified"}</text>
         
-        <circle cx="68" cy="${470 + (formData.interactionPreferences.length || 1) * 20 + 70}" r="4" fill="${formData.primaryColor}"/>
-        <text x="80" y="${470 + (formData.interactionPreferences.length || 1) * 20 + 74}" font-family="Arial" font-size="11">${formData.motives[2] || "Not specified"}</text>
+        <circle cx="68" cy="${655 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="${660 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" font-family="Arial" font-size="12">${formData.motives[2] || "Not specified"}</text>
         
         <!-- Cultural Context - Dynamically positioned based on content above -->
         ${formData.culturalContext ? `
-        <text x="60" y="${470 + (formData.interactionPreferences.length || 1) * 20 + 100}" font-family="Arial" font-size="14" font-weight="bold">Cultural Context</text>
-        <text x="70" y="${470 + (formData.interactionPreferences.length || 1) * 20 + 120}" font-family="Arial" font-size="11">${formData.culturalContext}</text>
+        <text x="150" y="${695 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Cultural Context</text>
+        <text x="70" y="${720 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0)}" font-family="Arial" font-size="12">${formData.culturalContext}</text>
         ` : ''}
         
         <!-- Accessibility needs section - Dynamically positioned based on content above -->
         ${formData.accessibilityNeeds?.length > 0 ? `
-          <text x="60" y="${470 + (formData.interactionPreferences.length || 1) * 20 + (formData.culturalContext ? 150 : 100)}" font-family="Arial" font-size="14" font-weight="bold">Accessibility Needs:</text>
+          <text x="150" y="${695 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0) + (formData.culturalContext ? 50 : 0)}" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Accessibility Needs</text>
           ${formData.accessibilityNeeds.map((need, index) => 
-            `<text x="70" y="${470 + (formData.interactionPreferences.length || 1) * 20 + (formData.culturalContext ? 170 : 120) + index * 20}" font-family="Arial" font-size="11">• ${need}</text>`
+            `<text x="70" y="${720 + (formData.interactionPreferences.length > 1 ? (formData.interactionPreferences.length - 1) * 25 : 0) + (formData.culturalContext ? 50 : 0) + index * 25}" font-family="Arial" font-size="12">• ${need}</text>`
           ).join('')}
         ` : ''}
       </svg>
@@ -206,7 +205,7 @@ const XRPersonaGenerator = () => {
   
     img.onload = () => {
       const heightMatch = generatedSVG.match(/height="([^"]+)"/);
-      const svgHeight = heightMatch ? parseInt(heightMatch[1]) : 600;
+      const svgHeight = heightMatch ? parseInt(heightMatch[1]) : 750;
   
       const canvas = document.createElement('canvas');
       // Set canvas dimensions 3x larger than SVG
