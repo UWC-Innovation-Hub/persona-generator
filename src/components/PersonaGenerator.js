@@ -1,13 +1,20 @@
 import React, { useState, useRef } from 'react';
 
-const PersonaGenerator = () => {
+const XRPersonaGenerator = () => {
   const [formData, setFormData] = useState({
     name: '',
     title: '',
     primaryColor: '#3b82f6', // Default blue
+    // XR-specific categories
     focusType: 'Interaction-focused',
-    sessionLength: 'Short sessions',
-    platformPref: 'Mobile user',
+    sessionLength: 'Short sessions (5-15 min)',
+    platformPref: 'Mobile-first user',
+    xrExperienceLevel: 'XR novice',
+    accessibilityNeeds: [],
+    interactionPreferences: [],
+    // Heritage-specific for museum/education contexts
+    culturalContext: '',
+    // Interaction motives with color coding
     motives: ['', '', '']
   });
   
@@ -22,6 +29,18 @@ const PersonaGenerator = () => {
     });
   };
   
+  const handleCheckboxChange = (category, value) => {
+    const currentValues = formData[category] || [];
+    const newValues = currentValues.includes(value)
+      ? currentValues.filter(item => item !== value)
+      : [...currentValues, value];
+    
+    setFormData({
+      ...formData,
+      [category]: newValues
+    });
+  };
+  
   const handleMotiveChange = (index, value) => {
     const newMotives = [...formData.motives];
     newMotives[index] = value;
@@ -32,43 +51,52 @@ const PersonaGenerator = () => {
   };
   
   const generatePersonaSVG = () => {
-    // This is a simplified version - a real implementation would have more robust SVG generation
+    // More sophisticated SVG that matches the examples better
     const svg = `
-      <svg width="300" height="500" xmlns="http://www.w3.org/2000/svg">
-        <!-- Persona Avatar Circle -->
-        <circle cx="150" cy="100" r="70" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="2"/>
+      <svg width="300" height="580" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer Circle -->
+        <circle cx="150" cy="100" r="80" fill="white" stroke="${formData.primaryColor}" stroke-width="6"/>
         
-        <!-- Colored Body Shape -->
-        <rect x="80" y="90" width="140" height="110" rx="70" fill="${formData.primaryColor}"/>
+        <!-- Avatar Body Shape -->
+        <circle cx="150" cy="120" r="50" fill="${formData.primaryColor}"/>
         
         <!-- Face -->
-        <circle cx="150" cy="90" r="40" fill="#f8d5a8"/>
-        <path d="M130,100 Q150,120 170,100" stroke="black" stroke-width="2" fill="none"/>
+        <circle cx="150" cy="80" r="40" fill="#f8d5a8"/>
+        <path d="M130,90 Q150,110 170,90" stroke="black" stroke-width="2" fill="none"/>
         
         <!-- Name and Title -->
-        <text x="150" y="220" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">${formData.name || "Name"}</text>
-        <text x="150" y="250" font-family="Arial" font-size="16" text-anchor="middle">${formData.title || "Title"}</text>
+        <text x="150" y="220" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">${formData.name || "User Persona"}</text>
+        <text x="150" y="250" font-family="Arial" font-size="16" text-anchor="middle">${formData.title || "XR User"}</text>
         
-        <!-- Characteristics -->
-        <rect x="60" y="270" width="${(formData.focusType?.length || 10) * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="75" y="290" font-family="Arial" font-size="14">${formData.focusType}</text>
+        <!-- Characteristics - Better styled to match examples -->
+        <rect x="60" y="280" width="180" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="300" font-family="Arial" font-size="14" text-anchor="middle">${formData.focusType}</text>
         
-        <rect x="60" y="310" width="${(formData.sessionLength?.length || 10) * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="75" y="330" font-family="Arial" font-size="14">${formData.sessionLength}</text>
+        <rect x="60" y="320" width="180" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="340" font-family="Arial" font-size="14" text-anchor="middle">${formData.sessionLength}</text>
         
-        <rect x="60" y="350" width="${(formData.platformPref?.length || 10) * 7 + 20}" height="30" rx="15" fill="#f3f4f6"/>
-        <text x="75" y="370" font-family="Arial" font-size="14">${formData.platformPref}</text>
+        <rect x="60" y="360" width="180" height="30" rx="15" fill="#f3f4f6"/>
+        <text x="150" y="380" font-family="Arial" font-size="14" text-anchor="middle">${formData.platformPref}</text>
         
-        <!-- Interaction Motives -->
-        <text x="60" y="410" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
-        <circle cx="70" cy="430" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="435" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
+        <!-- XR Experience Level -->
+        <rect x="60" y="400" width="180" height="30" rx="15" fill="#e5e7eb"/>
+        <text x="150" y="420" font-family="Arial" font-size="14" text-anchor="middle">${formData.xrExperienceLevel}</text>
         
-        <circle cx="70" cy="455" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="460" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
+        <!-- Interaction Motives - Now with color-coded bullets -->
+        <text x="60" y="450" font-family="Arial" font-size="16" font-weight="bold">Interaction Motives</text>
+        <circle cx="70" cy="470" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="475" font-family="Arial" font-size="14">${formData.motives[0] || "Not specified"}</text>
         
-        <circle cx="70" cy="480" r="5" fill="${formData.primaryColor}"/>
-        <text x="85" y="485" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
+        <circle cx="70" cy="495" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="500" font-family="Arial" font-size="14">${formData.motives[1] || "Not specified"}</text>
+        
+        <circle cx="70" cy="520" r="5" fill="${formData.primaryColor}"/>
+        <text x="85" y="525" font-family="Arial" font-size="14">${formData.motives[2] || "Not specified"}</text>
+        
+        <!-- If accessibility needs are specified -->
+        ${formData.accessibilityNeeds?.length > 0 ? `
+          <text x="60" y="550" font-family="Arial" font-size="14" font-weight="bold">Accessibility: ${formData.accessibilityNeeds.join(', ')}</text>
+        ` : ''}
       </svg>
     `;
     
@@ -82,69 +110,59 @@ const PersonaGenerator = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${formData.name.toLowerCase() || 'persona'}-persona.svg`;
+    a.download = `${formData.name.toLowerCase() || 'xr-persona'}.svg`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
   
-  const downloadPNG = () => {
-    if (!generatedSVG || !svgContainerRef.current) return;
-    
-    // Create an image with the SVG data
-    const img = new Image();
-    const svgBlob = new Blob([generatedSVG], {type: 'image/svg+xml;charset=utf-8'});
-    const url = URL.createObjectURL(svgBlob);
-    
-    img.onload = () => {
-      // Create a canvas to render the image
-      const canvas = document.createElement('canvas');
-      canvas.width = 300;
-      canvas.height = 500;
-      const ctx = canvas.getContext('2d');
-      
-      // Draw a white background
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw the image
-      ctx.drawImage(img, 0, 0);
-      
-      // Convert to PNG and download
-      canvas.toBlob((blob) => {
-        const pngUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = pngUrl;
-        a.download = `${formData.name.toLowerCase() || 'persona'}-persona.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(pngUrl);
-        URL.revokeObjectURL(url);
-      }, 'image/png');
-    };
-    
-    img.src = url;
-  };
-  
-  // Generate a random persona for demonstration
   const generateRandomPersona = () => {
-    const focusTypes = ['Interaction-focused', 'Story-focused', 'Content-focused', 'Detail-oriented'];
-    const sessionLengths = ['Short sessions', 'Medium sessions', 'Long sessions'];
-    const platformPrefs = ['Mobile user', 'No platform preference', 'Prefers console', 'Prefers PC'];
+    // Examples inspired by the provided persona images
+    const personas = [
+      {
+        name: 'Sipho',
+        title: 'The Digital Heritage Explorer',
+        primaryColor: '#3b82f6', // blue
+        focusType: 'Interaction-focused',
+        sessionLength: 'Short sessions (5-15 min)',
+        platformPref: 'Mobile-first user',
+        xrExperienceLevel: 'XR enthusiast',
+        accessibilityNeeds: ['Low-bandwidth alternatives'],
+        interactionPreferences: ['3D Exploration', 'Interactive Navigation'],
+        culturalContext: 'Local heritage connection',
+        motives: ['Digital innovation focus', 'Social media sharing', 'Quick, impactful experiences']
+      },
+      {
+        name: 'Themba',
+        title: 'The Heritage Seeker',
+        primaryColor: '#22c55e', // green
+        focusType: 'Interaction-focused',
+        sessionLength: 'Short sessions',
+        platformPref: 'Mobile user',
+        xrExperienceLevel: 'XR novice',
+        accessibilityNeeds: [],
+        interactionPreferences: ['Audio Integration', 'Visual Effects'],
+        culturalContext: 'Personal heritage connection',
+        motives: ['Connect with heritage', 'Share on social media', 'Brief, impactful experiences']
+      },
+      {
+        name: 'Nomvula',
+        title: 'The Cultural Connection Seeker',
+        primaryColor: '#a855f7', // purple
+        focusType: 'Emotionally-driven',
+        sessionLength: 'Medium-long sessions',
+        platformPref: 'Values personal stories',
+        xrExperienceLevel: 'XR comfortable',
+        accessibilityNeeds: ['Multiple language options'],
+        interactionPreferences: ['Audio Integration'],
+        culturalContext: 'Intergenerational sharing',
+        motives: ['Heritage connection', 'Emotional resonance', 'Intergenerational sharing']
+      }
+    ];
     
-    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-    
-    setFormData({
-      name: 'Example Persona',
-      title: 'The User Archetype',
-      primaryColor: randomColor,
-      focusType: focusTypes[Math.floor(Math.random() * focusTypes.length)],
-      sessionLength: sessionLengths[Math.floor(Math.random() * sessionLengths.length)],
-      platformPref: platformPrefs[Math.floor(Math.random() * platformPrefs.length)],
-      motives: ['Discover new content', 'Engage with others', 'Create something unique']
-    });
+    const randomPersona = personas[Math.floor(Math.random() * personas.length)];
+    setFormData(randomPersona);
     
     // Need to delay the SVG generation to ensure state is updated
     setTimeout(() => {
@@ -155,13 +173,14 @@ const PersonaGenerator = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6 text-center">XR Persona Generator</h1>
+      <p className="text-center text-gray-600 mb-4">Create personas for digital heritage, museum XR experiences, and more</p>
       
       <div className="mb-4 text-center">
         <button
           onClick={generateRandomPersona}
           className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 mb-4"
         >
-          Generate Example Persona
+          Generate Sample XR Persona
         </button>
       </div>
       
@@ -218,6 +237,8 @@ const PersonaGenerator = () => {
                 <option value="Story-focused">Story-focused</option>
                 <option value="Content-focused">Content-focused</option>
                 <option value="Detail-oriented">Detail-oriented</option>
+                <option value="Emotionally-driven">Emotionally-driven</option>
+                <option value="Context-focused">Context-focused</option>
               </select>
             </div>
             
@@ -229,8 +250,9 @@ const PersonaGenerator = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
               >
-                <option value="Short sessions">Short sessions</option>
-                <option value="Medium sessions">Medium sessions</option>
+                <option value="Short sessions (5-15 min)">Short sessions (5-15 min)</option>
+                <option value="Medium sessions (10-20 min)">Medium sessions (10-20 min)</option>
+                <option value="Medium-long sessions">Medium-long sessions</option>
                 <option value="Long sessions">Long sessions</option>
               </select>
             </div>
@@ -243,11 +265,74 @@ const PersonaGenerator = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
               >
-                <option value="Mobile user">Mobile user</option>
+                <option value="Mobile-first user">Mobile-first user</option>
                 <option value="No platform preference">No platform preference</option>
                 <option value="Prefers console">Prefers console</option>
                 <option value="Prefers PC">Prefers PC</option>
+                <option value="Values personal stories">Values personal stories</option>
+                <option value="Needs clear guidance">Needs clear guidance</option>
               </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">XR Experience Level</label>
+              <select
+                name="xrExperienceLevel"
+                value={formData.xrExperienceLevel}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="XR novice">XR novice</option>
+                <option value="XR comfortable">XR comfortable</option>
+                <option value="XR enthusiast">XR enthusiast</option>
+                <option value="XR expert">XR expert</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Interaction Preferences</label>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {['3D Exploration', 'Interactive Navigation', 'Audio Integration', 'Visual Effects'].map(pref => (
+                  <label key={pref} className="inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.interactionPreferences?.includes(pref) || false}
+                      onChange={() => handleCheckboxChange('interactionPreferences', pref)}
+                      className="mr-1"
+                    />
+                    <span className="text-sm">{pref}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Accessibility Needs</label>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {['Multiple language options', 'Low-bandwidth alternatives', 'Text formatting for emphasis'].map(need => (
+                  <label key={need} className="inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.accessibilityNeeds?.includes(need) || false}
+                      onChange={() => handleCheckboxChange('accessibilityNeeds', need)}
+                      className="mr-1"
+                    />
+                    <span className="text-sm">{need}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Cultural Context</label>
+              <input
+                type="text"
+                name="culturalContext"
+                value={formData.culturalContext}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="e.g. Local heritage connection"
+              />
             </div>
             
             <div>
@@ -293,23 +378,24 @@ const PersonaGenerator = () => {
                 >
                   Download SVG
                 </button>
-                <button
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-                  onClick={downloadPNG}
-                >
-                  Download PNG
-                </button>
               </div>
             )}
           </div>
         </div>
       </div>
       
-      <div className="mt-8 text-center text-sm text-gray-500">
-        <p>Created personas represent user archetypes for experience design.</p>
+      <div className="mt-8 text-sm text-gray-600 p-4 bg-gray-100 rounded-md">
+        <h3 className="font-semibold mb-2">XR Persona Usage Guidelines</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Use personas to inform interaction design decisions for digital heritage experiences</li>
+          <li>Consider accessibility needs when designing XR interfaces</li>
+          <li>Tailor session length to match persona preferences</li>
+          <li>Design interactions that match the persona's experience level</li>
+          <li>Create content that resonates with the persona's cultural context and motives</li>
+        </ul>
       </div>
     </div>
   );
 };
 
-export default PersonaGenerator;
+export default XRPersonaGenerator;
