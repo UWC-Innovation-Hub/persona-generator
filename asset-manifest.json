@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "https://uwc-innovation-hub.github.io/persona-generator/static/css/main.9dfb4c0a.css",
-    "main.js": "https://uwc-innovation-hub.github.io/persona-generator/static/js/main.b8dc1993.js",
+    "main.css": "https://uwc-innovation-hub.github.io/persona-generator/static/css/main.fd581ff4.css",
+    "main.js": "https://uwc-innovation-hub.github.io/persona-generator/static/js/main.394d1aac.js",
     "static/js/453.56fbd2dc.chunk.js": "https://uwc-innovation-hub.github.io/persona-generator/static/js/453.56fbd2dc.chunk.js",
     "index.html": "https://uwc-innovation-hub.github.io/persona-generator/index.html",
-    "main.9dfb4c0a.css.map": "https://uwc-innovation-hub.github.io/persona-generator/static/css/main.9dfb4c0a.css.map",
-    "main.b8dc1993.js.map": "https://uwc-innovation-hub.github.io/persona-generator/static/js/main.b8dc1993.js.map",
+    "main.fd581ff4.css.map": "https://uwc-innovation-hub.github.io/persona-generator/static/css/main.fd581ff4.css.map",
+    "main.394d1aac.js.map": "https://uwc-innovation-hub.github.io/persona-generator/static/js/main.394d1aac.js.map",
     "453.56fbd2dc.chunk.js.map": "https://uwc-innovation-hub.github.io/persona-generator/static/js/453.56fbd2dc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9dfb4c0a.css",
-    "static/js/main.b8dc1993.js"
+    "static/css/main.fd581ff4.css",
+    "static/js/main.394d1aac.js"
   ]
 }
