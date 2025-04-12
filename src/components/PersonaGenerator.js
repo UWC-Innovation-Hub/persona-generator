@@ -112,8 +112,7 @@ const XRPersonaGenerator = () => {
     
     // No longer need these sections as they're integrated directly in the SVG template
     // Create accessibility needs section with better text wrapping
-    let accessibilitySection = '';
-    // We don't need this section anymore as we're handling it directly in the SVG template
+    // We handle accessibility needs directly in the SVG template
     
     // Create interaction preferences section - integrated directly in SVG
     
